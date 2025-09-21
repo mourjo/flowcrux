@@ -6,3 +6,13 @@
 
 \c flowcrux_db;
 
+CREATE TABLE kv_store (
+    id SERIAL PRIMARY KEY,
+    kv_key TEXT NOT NULL UNIQUE,
+    kv_value TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    deleted_at TIMESTAMPTZ
+);
+
+

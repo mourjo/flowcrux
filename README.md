@@ -21,3 +21,27 @@ are
 
 - Login: demo
 - Password: demo
+
+### Connecting to PostgreSQL
+
+```bash
+docker exec -it postgres_flowcrux psql -U mourjo -d flowcrux_db 
+```
+
+### Creating a Kafka topic
+
+```bash
+docker exec -it flowcrux_kafka_broker /bin/kafka-topics --create --topic flowcrux_ops --bootstrap-server flowcrux_kafka_broker:29092 
+```
+
+### Producing to a Kafka topic
+
+```bash
+docker exec -it flowcrux_kafka_broker /bin/kafka-console-producer --bootstrap-server flowcrux_kafka_broker:29092 --topic flowcrux_ops
+```
+
+### Consuming from a Kafka topic
+
+```bash 
+docker exec -it flowcrux_kafka_broker /bin/kafka-console-consumer --bootstrap-server flowcrux_kafka_broker:29092 --topic flowcrux_ops
+ ```

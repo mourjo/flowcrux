@@ -32,9 +32,9 @@ services:
       # See https://docs.confluent.io/kafka/operations-tools/kafka-tools.html#kafka-storage-sh
       CLUSTER_ID: 'flowcrux'
 
-  app_postgres:
-    image: postgres:16.4
-    container_name: postgres_camudademo
+  postgres-flowcrux:
+    image: postgres:17.6
+    container_name: postgres_flowcrux
     networks:
       - camunda-platform
     environment:
