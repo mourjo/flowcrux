@@ -25,13 +25,22 @@ public class KeyValueHistoryEntity {
     @Column("kv_value")
     private String value;
 
+    @Column("key_version")
+    private Long version;
+    
     @Column("created_at")
     private OffsetDateTime createdAt;
 
-    public KeyValueHistoryEntity(Long id, String key, String value, OffsetDateTime createdAt) {
+    public KeyValueHistoryEntity(Long id, String key, String value, Long version, OffsetDateTime createdAt) {
         this.id = id;
         this.key = key;
         this.value = value;
+        if (version == null) {
+            version = 1L;
+        }
+
+        this.version = version;
+
         if (createdAt == null) {
             createdAt = OffsetDateTime.now();
         }

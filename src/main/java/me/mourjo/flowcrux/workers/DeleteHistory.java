@@ -21,7 +21,7 @@ public class DeleteHistory {
     @JobWorker(type = "delete-history")
     public KeyValueWithTTLOperation deleteHistory(@VariablesAsType KeyValueWithTTLOperation operation) {
         log.info("Starting {}", operation);
-        keyValueHistoryService.deleteHistory(operation.key());
+        keyValueHistoryService.deleteHistory(operation.key(), operation.version());
         return operation;
     }
 }

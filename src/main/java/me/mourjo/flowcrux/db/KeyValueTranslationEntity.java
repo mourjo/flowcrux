@@ -18,16 +18,23 @@ public class KeyValueTranslationEntity {
     @Id
     @Column("id")
     private Long id;
+
     @Column("kv_key")
     private String key;
+
     @Column("lang")
     private String language;
+
     @Column("translation")
     private String translation;
+
+    @Column("key_version")
+    private Long version;
+
     @Column("created_at")
     private OffsetDateTime createdAt;
 
-    public KeyValueTranslationEntity(Long id, String key, String language, String translation, OffsetDateTime createdAt) {
+    public KeyValueTranslationEntity(Long id, String key, String language, String translation, Long version, OffsetDateTime createdAt) {
         this.id = id;
         this.key = key;
         this.language = language;
@@ -35,6 +42,10 @@ public class KeyValueTranslationEntity {
         if (createdAt == null) {
             createdAt = OffsetDateTime.now();
         }
+        if (version == null) {
+            version = 1L;
+        }
+        this.version = version;
         this.createdAt = createdAt;
     }
 }

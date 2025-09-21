@@ -20,7 +20,7 @@ public class SetKey {
     @JobWorker(type = "set-key")
     public KeyValueWithTTLOperation setKey(@VariablesAsType KeyValueWithTTLOperation operation) {
         log.info("Starting {}", operation);
-        keyValueStorageService.store(operation.key(), operation.value());
-        return operation;
+        var result = keyValueStorageService.store(operation.key(), operation.value());
+        return KeyValueWithTTLOperation.buildFrom(operation).version(result.getVersion()).build();
     }
 }

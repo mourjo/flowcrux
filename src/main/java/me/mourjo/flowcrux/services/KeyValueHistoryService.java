@@ -20,20 +20,25 @@ public class KeyValueHistoryService {
         return repository.getHistoricalValues(key);
     }
 
-    public void createHistory(String key, String value) {
+    public void createHistory(String key, String value, long keyVersion) {
         log.info("Creating history for key `{}` and value `{}`", key, value);
         repository.save(
             KeyValueHistoryEntity.builder()
                 .key(key)
                 .value(value)
+                .version(keyVersion)
                 .build()
         );
     }
 
-    public void deleteHistory(String key) {
-        log.info("Deleting history of key `{}`", key);
-        int rows = repository.deleteHistoricalValues(key);
-        log.info("Deleted {} rows", rows);
+    public void deleteHistory(String key, long version) {
+        boolean concurrentUpdate = getHistory(key).stream().anyMatch(history -> history.getVersion() > version);
+        if (!concurrentUpdate) {
+            repository.deleteHistoricalValues(key, version);
+            log.info("Deleted history of key `{}` version `{}`", key, version);
+        } else {
+            log.warn("Version mismatch: Not deleing key `{}` version `{}`", key, version);
+        }
     }
 
     public List<KeyValueHistoryEntity> searchHistory(String text) {

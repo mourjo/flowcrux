@@ -20,7 +20,7 @@ public class UpdateHistory {
     @JobWorker(type = "update-history")
     public KeyValueWithTTLOperation updateHistory(@VariablesAsType KeyValueWithTTLOperation operation) {
         log.info("Starting {}", operation);
-        keyValueHistoryService.createHistory(operation.key(), operation.value());
+        keyValueHistoryService.createHistory(operation.key(), operation.value(), operation.version());
         return operation;
     }
 

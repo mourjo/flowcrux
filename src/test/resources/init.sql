@@ -10,9 +10,9 @@ CREATE TABLE kv_store (
     id SERIAL PRIMARY KEY,
     kv_key TEXT NOT NULL UNIQUE,
     kv_value TEXT,
+    version INT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    deleted_at TIMESTAMPTZ
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 
@@ -20,6 +20,7 @@ CREATE TABLE kv_store_history (
     id SERIAL PRIMARY KEY,
     kv_key TEXT NOT NULL,
     kv_value TEXT,
+    key_version INT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -28,5 +29,6 @@ CREATE TABLE kv_store_translations (
     kv_key TEXT NOT NULL,
     lang TEXT NOT NULL,
     translation TEXT NOT NULL,
+    key_version INT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );

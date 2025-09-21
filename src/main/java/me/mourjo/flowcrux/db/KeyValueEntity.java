@@ -25,16 +25,16 @@ public class KeyValueEntity {
     @Column("kv_value")
     private String value;
 
+    @Column("version")
+    private Long version;
+
     @Column("created_at")
     private OffsetDateTime createdAt;
 
     @Column("updated_at")
     private OffsetDateTime updatedAt;
 
-    @Column("deleted_at")
-    private OffsetDateTime deletedAt;
-
-    public KeyValueEntity(Long id, String key, String value, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime deletedAt) {
+    public KeyValueEntity(Long id, String key, String value, Long version, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
         this.id = id;
         this.key = key;
         this.value = value;
@@ -48,8 +48,12 @@ public class KeyValueEntity {
             updatedAt = now;
         }
 
+        if (version == null) {
+            version = 1L;
+        }
+
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
+        this.version = version;
     }
 }

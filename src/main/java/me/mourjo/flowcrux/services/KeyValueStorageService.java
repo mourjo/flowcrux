@@ -24,6 +24,7 @@ public class KeyValueStorageService {
             existingEntity.setValue(value);
             existingEntity.setUpdatedAt(OffsetDateTime.now());
             updatedEntity = existingEntity;
+            updatedEntity.setVersion(existingEntity.getVersion() + 1);
 
         } else {
             updatedEntity = KeyValueEntity.builder()
@@ -40,9 +41,14 @@ public class KeyValueStorageService {
         return repository.findByKey(key);
     }
 
-    public void delete(String key) {
-        log.info("Deleting key `{}`", key);
-        repository.deleteByKey(key);
+    public void delete(String key, long version) {
+        var existingEntity = retrieve(key);
+        if (existingEntity != null && existingEntity.getVersion() == version) {
+            log.info("Deleting key `{}` version {}", key, version);
+            repository.deleteByKey(key, version);
+        } else {
+            log.warn("Version mismatch: Not deleing key `{}` version `{}`", key, version);
+        }
     }
 
 }

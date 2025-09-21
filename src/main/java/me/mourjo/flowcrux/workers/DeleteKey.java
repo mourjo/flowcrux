@@ -20,7 +20,7 @@ public class DeleteKey {
     @JobWorker(type = "delete-key")
     public KeyValueWithTTLOperation deleteKey(@VariablesAsType KeyValueWithTTLOperation operation) {
         log.info("Starting {}", operation);
-        keyValueStorageService.delete(operation.key());
+        keyValueStorageService.delete(operation.key(), operation.version());
         return operation;
     }
 }

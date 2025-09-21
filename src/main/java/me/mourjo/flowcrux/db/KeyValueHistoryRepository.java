@@ -22,7 +22,7 @@ public interface KeyValueHistoryRepository extends ListCrudRepository<KeyValueHi
 
     @Modifying
     @Query("""
-        DELETE FROM kv_store_history WHERE kv_key=:key
+        DELETE FROM kv_store_history WHERE kv_key=:key AND key_version <= :version
         """)
-    int deleteHistoricalValues(@Param("key") String key);
+    int deleteHistoricalValues(@Param("key") String key, @Param("version") long version);
 }

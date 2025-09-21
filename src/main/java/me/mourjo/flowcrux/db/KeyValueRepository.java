@@ -16,8 +16,8 @@ public interface KeyValueRepository extends ListCrudRepository<KeyValueEntity, L
 
     @Modifying
     @Query("""
-        DELETE FROM kv_store WHERE kv_key = :key;
+        DELETE FROM kv_store WHERE kv_key = :key AND version <= :version;
         """)
-    int deleteByKey(@Param("key") String key);
+    int deleteByKey(@Param("key") String key, @Param("version") long version);
 
 }
