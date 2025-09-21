@@ -6,7 +6,7 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_10n0k39" sourceRef="StartEvent_1" targetRef="set-key" />
     <bpmn:intermediateCatchEvent id="wait-for-ttl" name="Wait Until TTL expires">
-      <bpmn:incoming>Flow_0un3tuy</bpmn:incoming>
+      <bpmn:incoming>Flow_06wmk4k</bpmn:incoming>
       <bpmn:outgoing>Flow_16oklxs</bpmn:outgoing>
       <bpmn:timerEventDefinition id="TimerEventDefinition_1skbse5">
         <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">=ttl</bpmn:timeDuration>
@@ -21,11 +21,10 @@
     <bpmn:sequenceFlow id="Flow_16oklxs" sourceRef="wait-for-ttl" targetRef="Gateway_1rmp3o8" />
     <bpmn:parallelGateway id="Gateway_1jo3npj">
       <bpmn:incoming>Flow_0361d8o</bpmn:incoming>
-      <bpmn:outgoing>Flow_0un3tuy</bpmn:outgoing>
       <bpmn:outgoing>Flow_0y2nnur</bpmn:outgoing>
       <bpmn:outgoing>Flow_1iz5ix0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0powhbu</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:sequenceFlow id="Flow_0un3tuy" sourceRef="Gateway_1jo3npj" targetRef="wait-for-ttl" />
     <bpmn:serviceTask id="set-key" name="set-key">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="set-key" />
@@ -69,6 +68,25 @@
     <bpmn:sequenceFlow id="Flow_0y2nnur" sourceRef="Gateway_1jo3npj" targetRef="update-history" />
     <bpmn:sequenceFlow id="Flow_1iz5ix0" sourceRef="Gateway_1jo3npj" targetRef="add-translations" />
     <bpmn:sequenceFlow id="Flow_0361d8o" sourceRef="set-key" targetRef="Gateway_1jo3npj" />
+    <bpmn:exclusiveGateway id="Gateway_12fgmzs">
+      <bpmn:incoming>Flow_0powhbu</bpmn:incoming>
+      <bpmn:outgoing>Flow_06wmk4k</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1h5iu1y</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_06wmk4k" sourceRef="Gateway_12fgmzs" targetRef="wait-for-ttl">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ttl != null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_072od2m">
+      <bpmn:incoming>Flow_1h5iu1y</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0powhbu" sourceRef="Gateway_1jo3npj" targetRef="Gateway_12fgmzs" />
+    <bpmn:sequenceFlow id="Flow_1h5iu1y" sourceRef="Gateway_12fgmzs" targetRef="Event_072od2m">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=ttl = null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:textAnnotation id="TextAnnotation_0hwh7gs">
+      <bpmn:text>If there is no TTL</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1moydv5" associationDirection="None" sourceRef="Flow_1h5iu1y" targetRef="TextAnnotation_0hwh7gs" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="expiring-keys">
@@ -77,10 +95,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0sverg7_di" bpmnElement="update-history">
         <dc:Bounds x="610" y="320" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0bl0gij_di" bpmnElement="add-translations">
-        <dc:Bounds x="610" y="490" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_15osumh_di" bpmnElement="wait-for-ttl">
@@ -100,10 +114,6 @@
         <dc:Bounds x="1010" y="320" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1t5p4yt_di" bpmnElement="delete-translations">
-        <dc:Bounds x="1010" y="490" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1cunt62_di" bpmnElement="set-key">
         <dc:Bounds x="260" y="200" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -111,13 +121,27 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="152" y="222" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_12fgmzs_di" bpmnElement="Gateway_12fgmzs" isMarkerVisible="true">
+        <dc:Bounds x="585" y="215" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_072od2m_di" bpmnElement="Event_072od2m">
+        <dc:Bounds x="742" y="112" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0bl0gij_di" bpmnElement="add-translations">
+        <dc:Bounds x="610" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1t5p4yt_di" bpmnElement="delete-translations">
+        <dc:Bounds x="1010" y="440" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1moydv5_di" bpmnElement="Association_1moydv5">
+        <di:waypoint x="632.5" y="130" />
+        <di:waypoint x="657" y="112" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0361d8o_di" bpmnElement="Flow_0361d8o">
         <di:waypoint x="360" y="240" />
         <di:waypoint x="485" y="240" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0un3tuy_di" bpmnElement="Flow_0un3tuy">
-        <di:waypoint x="535" y="240" />
-        <di:waypoint x="742" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0y2nnur_di" bpmnElement="Flow_0y2nnur">
         <di:waypoint x="510" y="265" />
@@ -126,8 +150,8 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1iz5ix0_di" bpmnElement="Flow_1iz5ix0">
         <di:waypoint x="510" y="265" />
-        <di:waypoint x="510" y="500" />
-        <di:waypoint x="610" y="500" />
+        <di:waypoint x="510" y="490" />
+        <di:waypoint x="610" y="490" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16oklxs_di" bpmnElement="Flow_16oklxs">
         <di:waypoint x="778" y="240" />
@@ -145,13 +169,30 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1qgyc9v_di" bpmnElement="Flow_1qgyc9v">
         <di:waypoint x="890" y="265" />
-        <di:waypoint x="890" y="530" />
-        <di:waypoint x="1010" y="530" />
+        <di:waypoint x="890" y="480" />
+        <di:waypoint x="1010" y="480" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_10n0k39_di" bpmnElement="Flow_10n0k39">
         <di:waypoint x="188" y="240" />
         <di:waypoint x="260" y="240" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06wmk4k_di" bpmnElement="Flow_06wmk4k">
+        <di:waypoint x="635" y="240" />
+        <di:waypoint x="742" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0powhbu_di" bpmnElement="Flow_0powhbu">
+        <di:waypoint x="535" y="240" />
+        <di:waypoint x="585" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1h5iu1y_di" bpmnElement="Flow_1h5iu1y">
+        <di:waypoint x="610" y="215" />
+        <di:waypoint x="610" y="130" />
+        <di:waypoint x="740" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_0hwh7gs_di" bpmnElement="TextAnnotation_0hwh7gs">
+        <dc:Bounds x="630" y="80" width="132" height="32" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
 </bpmn:definitions>

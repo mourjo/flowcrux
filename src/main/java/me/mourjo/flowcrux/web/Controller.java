@@ -33,7 +33,6 @@ public class Controller {
 
     @PostMapping("set-key-with-ttl")
     ResponseEntity<GenericResponse> setKeyWithTTL(@RequestBody SetKeyWithTTLRequest request) {
-        log.info("Processing request {}", request);
         var ttlMillis = request.ttlMillis();
         var eta = LocalDateTime.now().plus(ttlMillis, ChronoUnit.MILLIS);
 
@@ -63,14 +62,25 @@ public class Controller {
 
     @PostMapping("set-key")
     ResponseEntity<GenericResponse> setKey(@RequestBody SetKeyRequest request) {
-        var updatedEntity = keyValueStorageService.store(request.key(), request.value());
+        var variables = KeyValueWithTTLOperation.builder()
+            .key(request.key())
+            .value(request.value())
+            .build();
 
+        var event = zeebeClient.newCreateInstanceCommand()
+            .bpmnProcessId(BPMN_PROCESS)
+            .latestVersion()
+            .variables(variables)
+            .send()
+            .join();
+
+        var id = event.getProcessInstanceKey();
         return ResponseEntity.ok(
             GenericResponse.builder()
                 .key(request.key())
                 .value(request.value())
-                .message("Created key %s".formatted(request.key()))
-                .operationId(updatedEntity.getId())
+                .message("Created key with no expiry")
+                .operationId(id)
                 .build()
         );
     }
