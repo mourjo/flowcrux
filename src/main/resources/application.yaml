@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: flowcrux
+  datasource:
+    url: jdbc:postgresql://localhost:5432/flowcrux_db
+    username: mourjo
+    password: flowcrux_db
+    driver-class-name: org.postgresql.Driver
+
+springdoc:
+  swagger-ui:
+    path=/swagger-ui
+
+server:
+  port: 9818
+
+camunda:
+  client:
+    mode: self-managed
+    zeebe:
+      execution-threads: 10
+      enabled: true
+      grpc-address: http://127.0.0.1:26500
+      rest-address: http://127.0.0.1:8081
+
+# docker exec -it flowcrux_kafka_broker bash
+# /bin/kafka-topics --bootstrap-server flowcrux_kafka_broker:29092 --create --topic flowcrux_ops
+#
+# docker exec -it flowcrux_kafka_broker /bin/kafka-console-consumer  --bootstrap-server flowcrux_kafka_broker:29092 --topic flowcrux_ops
+message:
+  ops_topic: flowcrux_ops
+
+
