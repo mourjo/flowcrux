@@ -1,5 +1,7 @@
 package me.mourjo.flowcrux.db;
 
+import java.util.List;
+
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -7,17 +9,17 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface KeyValueRepository extends ListCrudRepository<KeyValueEntity, Long> {
+public interface KeyValueHistoryRepository extends ListCrudRepository<KeyValueHistoryEntity, Long> {
 
     @Query("""
-        SELECT * FROM kv_store WHERE kv_key = :key;
+        SELECT * FROM kv_store_history WHERE kv_key=:key
         """)
-    KeyValueEntity findByKey(@Param("key") String key);
+    List<KeyValueHistoryEntity> getHistoricalValues(@Param("key") String key);
+
 
     @Modifying
     @Query("""
-        DELETE FROM kv_store WHERE kv_key = :key;
+        DELETE FROM kv_store_history WHERE kv_key=:key
         """)
-    int deleteByKey(@Param("key") String key);
-
+    int deleteHistoricalValues(@Param("key") String key);
 }

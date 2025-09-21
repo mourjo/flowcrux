@@ -6,21 +6,21 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.mourjo.flowcrux.dto.KeyValueWithTTLOperation;
-import me.mourjo.flowcrux.services.KeyValueStorageService;
+import me.mourjo.flowcrux.services.KeyValueTranslationsService;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
 @AllArgsConstructor
-public class DeleteKey {
+public class AddTranslations {
 
-    KeyValueStorageService keyValueStorageService;
+    KeyValueTranslationsService keyValueTranslationsService;
 
     @SneakyThrows
-    @JobWorker(type = "delete-key")
-    public KeyValueWithTTLOperation deleteKey(@VariablesAsType KeyValueWithTTLOperation operation) {
+    @JobWorker(type = "add-translations")
+    public KeyValueWithTTLOperation addTranslations(@VariablesAsType KeyValueWithTTLOperation operation) {
         log.info("Starting {}", operation);
-        keyValueStorageService.delete(operation.key());
+        keyValueTranslationsService.addTranslations(operation.key(), operation.value());
         return operation;
     }
 }

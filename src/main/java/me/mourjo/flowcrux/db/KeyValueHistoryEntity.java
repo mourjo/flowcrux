@@ -9,11 +9,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("kv_store")
+@Table("kv_store_history")
 @Getter
 @Setter
 @Builder
-public class KeyValueEntity {
+public class KeyValueHistoryEntity {
 
     @Id
     @Column("id")
@@ -28,28 +28,13 @@ public class KeyValueEntity {
     @Column("created_at")
     private OffsetDateTime createdAt;
 
-    @Column("updated_at")
-    private OffsetDateTime updatedAt;
-
-    @Column("deleted_at")
-    private OffsetDateTime deletedAt;
-
-    public KeyValueEntity(Long id, String key, String value, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime deletedAt) {
+    public KeyValueHistoryEntity(Long id, String key, String value, OffsetDateTime createdAt) {
         this.id = id;
         this.key = key;
         this.value = value;
-
-        var now = OffsetDateTime.now();
         if (createdAt == null) {
-            createdAt = now;
+            createdAt = OffsetDateTime.now();
         }
-
-        if (updatedAt == null) {
-            updatedAt = now;
-        }
-
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 }

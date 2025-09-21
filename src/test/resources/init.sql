@@ -16,3 +16,17 @@ CREATE TABLE kv_store (
 );
 
 
+CREATE TABLE kv_store_history (
+    id SERIAL PRIMARY KEY,
+    kv_key TEXT NOT NULL,
+    kv_value TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE TABLE kv_store_translations (
+    id SERIAL PRIMARY KEY,
+    kv_key TEXT NOT NULL,
+    lang TEXT NOT NULL,
+    translation TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);

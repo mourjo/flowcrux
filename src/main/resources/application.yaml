@@ -15,6 +15,7 @@ logging:
     root: WARN
     org.springframework: ERROR
     me.mourjo: INFO
+    me.mourjo.flowcrux.workers: WARN
   pattern:
     console: "[%date] [%highlight(%level)] %logger: %msg%n"
   file:

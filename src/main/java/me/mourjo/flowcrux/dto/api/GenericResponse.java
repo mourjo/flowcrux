@@ -1,4 +1,4 @@
-package me.mourjo.flowcrux.dto;
+package me.mourjo.flowcrux.dto.api;
 
 import lombok.Builder;
 

@@ -9,47 +9,32 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("kv_store")
+@Table("kv_store_translations")
 @Getter
 @Setter
 @Builder
-public class KeyValueEntity {
+public class KeyValueTranslationEntity {
 
     @Id
     @Column("id")
     private Long id;
-
     @Column("kv_key")
     private String key;
-
-    @Column("kv_value")
-    private String value;
-
+    @Column("lang")
+    private String language;
+    @Column("translation")
+    private String translation;
     @Column("created_at")
     private OffsetDateTime createdAt;
 
-    @Column("updated_at")
-    private OffsetDateTime updatedAt;
-
-    @Column("deleted_at")
-    private OffsetDateTime deletedAt;
-
-    public KeyValueEntity(Long id, String key, String value, OffsetDateTime createdAt, OffsetDateTime updatedAt, OffsetDateTime deletedAt) {
+    public KeyValueTranslationEntity(Long id, String key, String language, String translation, OffsetDateTime createdAt) {
         this.id = id;
         this.key = key;
-        this.value = value;
-
-        var now = OffsetDateTime.now();
+        this.language = language;
+        this.translation = translation;
         if (createdAt == null) {
-            createdAt = now;
+            createdAt = OffsetDateTime.now();
         }
-
-        if (updatedAt == null) {
-            updatedAt = now;
-        }
-
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.deletedAt = deletedAt;
     }
 }

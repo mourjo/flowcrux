@@ -2,17 +2,16 @@ package me.mourjo.flowcrux.web;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mourjo.flowcrux.db.KeyValueEntity;
-import me.mourjo.flowcrux.db.KeyValueRepository;
-import me.mourjo.flowcrux.dto.GenericResponse;
 import me.mourjo.flowcrux.dto.KeyValueWithTTLOperation;
-import me.mourjo.flowcrux.dto.SetWithTTLRequest;
+import me.mourjo.flowcrux.dto.api.GenericResponse;
+import me.mourjo.flowcrux.dto.api.SetKeyRequest;
+import me.mourjo.flowcrux.dto.api.SetKeyWithTTLRequest;
+import me.mourjo.flowcrux.services.KeyValueStorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
     public static final String BPMN_PROCESS = "expiring-keys";
+    KeyValueStorageService keyValueStorageService;
     private ZeebeClient zeebeClient;
-    private KeyValueRepository repository;
 
     @PostMapping("set-key-with-ttl")
-    ResponseEntity<GenericResponse> setKeyWithTTL(@RequestBody SetWithTTLRequest request) {
+    ResponseEntity<GenericResponse> setKeyWithTTL(@RequestBody SetKeyWithTTLRequest request) {
         log.info("Processing request {}", request);
         var ttlMillis = request.ttlMillis();
         var eta = LocalDateTime.now().plus(ttlMillis, ChronoUnit.MILLIS);
@@ -60,23 +59,8 @@ public class Controller {
     }
 
     @PostMapping("set-key")
-    ResponseEntity<GenericResponse> setKey(@RequestBody SetWithTTLRequest request) {
-        var existingEntity = repository.findByKey(request.key());
-        KeyValueEntity updatedEntity;
-
-        if (existingEntity != null) {
-            existingEntity.setValue(request.value());
-            existingEntity.setUpdatedAt(OffsetDateTime.now());
-            updatedEntity = existingEntity;
-
-        } else {
-            updatedEntity = KeyValueEntity.builder()
-                .key(request.key())
-                .value(request.value())
-                .build();
-        }
-
-        repository.save(updatedEntity);
+    ResponseEntity<GenericResponse> setKey(@RequestBody SetKeyRequest request) {
+        var updatedEntity = keyValueStorageService.store(request.key(), request.value());
 
         return ResponseEntity.ok(
             GenericResponse.builder()
@@ -90,7 +74,7 @@ public class Controller {
 
     @GetMapping("{key}")
     ResponseEntity<GenericResponse> getValueForKey(@PathVariable String key) {
-        var kv = repository.findByKey(key);
+        var kv = keyValueStorageService.retrieve(key);
         return ResponseEntity.ok(
             GenericResponse.builder()
                 .key(kv.getKey())
