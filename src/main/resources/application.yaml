@@ -8,9 +8,17 @@ spring:
     driver-class-name: org.postgresql.Driver
 
 springdoc:
-  swagger-ui:
-    path=/swagger-ui
+  swagger-ui.path: /
 
+logging:
+  level:
+    root: WARN
+    org.springframework: ERROR
+    me.mourjo: INFO
+  pattern:
+    console: "[%date] [%highlight(%level)] %logger: %msg%n"
+  file:
+    name: logs/app.log
 server:
   port: 9818
 
