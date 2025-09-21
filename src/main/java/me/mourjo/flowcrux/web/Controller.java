@@ -3,6 +3,7 @@ package me.mourjo.flowcrux.web;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,7 @@ import me.mourjo.flowcrux.dto.KeyValueWithTTLOperation;
 import me.mourjo.flowcrux.dto.api.GenericResponse;
 import me.mourjo.flowcrux.dto.api.SetKeyRequest;
 import me.mourjo.flowcrux.dto.api.SetKeyWithTTLRequest;
+import me.mourjo.flowcrux.services.KeyValueSearchService;
 import me.mourjo.flowcrux.services.KeyValueStorageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,7 @@ public class Controller {
 
     public static final String BPMN_PROCESS = "expiring-keys";
     KeyValueStorageService keyValueStorageService;
+    KeyValueSearchService keyValueSearchService;
     private ZeebeClient zeebeClient;
 
     @PostMapping("set-key-with-ttl")
@@ -82,6 +85,20 @@ public class Controller {
                 .message("This was created at %s, last updated at %s".formatted(kv.getCreatedAt(), kv.getUpdatedAt()))
                 .build()
         );
+    }
+
+    @GetMapping("/search/{text}")
+    ResponseEntity<List<GenericResponse>> search(@PathVariable String text) {
+        var entities = keyValueSearchService.search(text).stream().map(
+            entity ->
+                GenericResponse.builder()
+                    .key(entity.getKey())
+                    .value(entity.getValue())
+                    .message("This was created at %s, last updated at %s".formatted(entity.getCreatedAt(), entity.getUpdatedAt()))
+                    .build()
+        ).toList();
+
+        return ResponseEntity.ok(entities);
     }
 
 }

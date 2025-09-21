@@ -17,6 +17,9 @@ public interface KeyValueHistoryRepository extends ListCrudRepository<KeyValueHi
     List<KeyValueHistoryEntity> getHistoricalValues(@Param("key") String key);
 
 
+    List<KeyValueHistoryEntity> findByKeyOrValueContaining(String keyPhrase, String valuePhrase);
+
+
     @Modifying
     @Query("""
         DELETE FROM kv_store_history WHERE kv_key=:key

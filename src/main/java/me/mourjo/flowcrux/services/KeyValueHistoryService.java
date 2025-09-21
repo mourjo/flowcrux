@@ -35,4 +35,8 @@ public class KeyValueHistoryService {
         int rows = repository.deleteHistoricalValues(key);
         log.info("Deleted {} rows", rows);
     }
+
+    public List<KeyValueHistoryEntity> searchHistory(String text) {
+        return repository.findByKeyOrValueContaining(text, text);
+    }
 }
