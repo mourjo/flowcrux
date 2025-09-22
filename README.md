@@ -15,7 +15,7 @@ A system like this can be implemented in as micro services, because they provide
 - Heterogeneous technology stacks
 - etc
 
-<img src="src/test/resources/kafka-based-data-flow.png" width="400px"/>
+<img src="src/test/resources/kafka-based-data-flow.png" width="600px"/>
 
 Then a new feature comes along: setting a key with a TTL (time to live), or automatic deletion. This
 creates a problem - which micro services do you need to involve in this automatic deletion? Kafka,
@@ -31,7 +31,7 @@ end up focusing on the point-to-point communications and lose track of the globa
 image below, if we own the green dot, the blue dots are what we are aware of, which may only be a
 small part of the larger story.
 
-<img src="src/test/resources/spaghetti.png" width="400px"/>
+<img src="src/test/resources/spaghetti.png" width="600px"/>
 
 So when the feature comes along (like the one to add TTLs to keys and values), it mandates us to go
 back to the drawing board and re-learn the life of a request. And this repeats for every feature.
@@ -43,7 +43,7 @@ micro-servies to understand the whole story they play a part in?
 The answer, I would argue is a semantic layer that orchestrates micro services, expressed as a
 diagram.
 
-<img src="src/test/resources/bpmn-control-flow.png" width="600px"/>
+<img src="src/test/resources/bpmn-control-flow.png" width="800px"/>
 
 In the above diagram - the big box on the right is an orchestration layer. But unlike durable
 execution frameworks (or workflow engines), it focuses a lot on the expression of the flows using an
