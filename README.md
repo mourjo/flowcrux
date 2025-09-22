@@ -50,8 +50,8 @@ execution frameworks (or workflow engines), it focuses a lot on the expression o
 open standard notation called BPMN (Business Process Model and Notation). It includes many
 orchestration features like callbacks, retries, fork/join etc.
 
-But fundamentally, a diagram driven orchestration layer can help increase organizational cohesion.
-Ultimately we cannot improve what we do not understand. In a decentralized world anything that
+A diagram driven orchestration layer can help increase organizational cohesion. Ultimately we cannot
+improve what we do not understand. In a decentralized world anything that
 brings pieces together to form a cohesive mental model is powerful.
 
 # Running the system
