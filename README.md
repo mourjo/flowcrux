@@ -56,6 +56,11 @@ brings pieces together to form a cohesive mental model is powerful.
 
 # Running the system
 
+This project demonstrates how BPMN can be used to orchestrate microservices. This project uses
+[Camunda](https://github.com/camunda) as the engine that runs the BPMN spec for a
+key-value store. Alternatives like [Flowable](https://github.com/flowable/flowable-engine) should
+also work because BPMN is an open standard.
+
 The following will start the server on port 9818. There is an
 included [Swagger UI](http://localhost:9818/swagger-ui/index.html).
 
@@ -63,7 +68,7 @@ included [Swagger UI](http://localhost:9818/swagger-ui/index.html).
 mvn clean && mvn spring-boot:run
 ```
 
-# Running Camunda
+### Running Camunda
 
 ```bash
 docker compose up
