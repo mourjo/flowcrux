@@ -4,8 +4,8 @@ import java.time.OffsetDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mourjo.flowcrux.db.KeyValueEntity;
-import me.mourjo.flowcrux.db.KeyValueRepository;
+import me.mourjo.flowcrux.db.entities.KeyValue;
+import me.mourjo.flowcrux.db.repositories.KeyValueRepository;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -15,10 +15,10 @@ public class KeyValueStorageService {
 
     private KeyValueRepository repository;
 
-    public KeyValueEntity store(String key, String value) {
+    public KeyValue store(String key, String value) {
         log.info("Storing key `{}` with value `{}`", key, value);
         var existingEntity = repository.findByKey(key);
-        KeyValueEntity updatedEntity;
+        KeyValue updatedEntity;
 
         if (existingEntity != null) {
             existingEntity.setValue(value);
@@ -27,7 +27,7 @@ public class KeyValueStorageService {
             updatedEntity.setVersion(existingEntity.getVersion() + 1);
 
         } else {
-            updatedEntity = KeyValueEntity.builder()
+            updatedEntity = KeyValue.builder()
                 .key(key)
                 .value(value)
                 .build();
@@ -36,7 +36,7 @@ public class KeyValueStorageService {
         return repository.save(updatedEntity);
     }
 
-    public KeyValueEntity retrieve(String key) {
+    public KeyValue retrieve(String key) {
         log.info("Retrieving key `{}`", key);
         return repository.findByKey(key);
     }

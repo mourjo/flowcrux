@@ -1,7 +1,8 @@
-package me.mourjo.flowcrux.db;
+package me.mourjo.flowcrux.db.repositories;
 
 import java.util.List;
 
+import me.mourjo.flowcrux.db.entities.KeyValueHistory;
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -9,15 +10,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface KeyValueHistoryRepository extends ListCrudRepository<KeyValueHistoryEntity, Long> {
+public interface KeyValueHistoryRepository extends ListCrudRepository<KeyValueHistory, Long> {
 
     @Query("""
         SELECT * FROM kv_store_history WHERE kv_key=:key
         """)
-    List<KeyValueHistoryEntity> getHistoricalValues(@Param("key") String key);
+    List<KeyValueHistory> getHistoricalValues(@Param("key") String key);
 
 
-    List<KeyValueHistoryEntity> findByKeyOrValueContaining(String keyPhrase, String valuePhrase);
+    List<KeyValueHistory> findByKeyOrValueContaining(String keyPhrase, String valuePhrase);
 
 
     @Modifying

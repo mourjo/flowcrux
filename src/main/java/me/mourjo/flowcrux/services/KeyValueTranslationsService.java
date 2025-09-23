@@ -5,8 +5,8 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import me.mourjo.flowcrux.db.KeyValueTranslationEntity;
-import me.mourjo.flowcrux.db.KeyValueTranslationsRepository;
+import me.mourjo.flowcrux.db.entities.KeyValueTranslation;
+import me.mourjo.flowcrux.db.repositories.KeyValueTranslationsRepository;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -29,7 +29,7 @@ public class KeyValueTranslationsService {
     }
 
     @SneakyThrows
-    public List<KeyValueTranslationEntity> searchTranslations(String key) {
+    public List<KeyValueTranslation> searchTranslations(String key) {
         return List.of();
     }
 }

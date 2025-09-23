@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import me.mourjo.flowcrux.db.KeyValueEntity;
-import me.mourjo.flowcrux.db.KeyValueHistoryEntity;
-import me.mourjo.flowcrux.db.KeyValueTranslationEntity;
+import me.mourjo.flowcrux.db.entities.KeyValue;
+import me.mourjo.flowcrux.db.entities.KeyValueHistory;
+import me.mourjo.flowcrux.db.entities.KeyValueTranslation;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,10 +21,10 @@ public class KeyValueSearchService {
     KeyValueHistoryService keyValueHistoryService;
     KeyValueStorageService keyValueStorageService;
 
-    public List<KeyValueEntity> search(String text) {
+    public List<KeyValue> search(String text) {
         Set<String> matchingKeys = new HashSet<>();
-        matchingKeys.addAll(keyValueTranslationsService.searchTranslations(text).stream().map(KeyValueTranslationEntity::getKey).collect(Collectors.toSet()));
-        matchingKeys.addAll(keyValueHistoryService.searchHistory(text).stream().map(KeyValueHistoryEntity::getKey).collect(Collectors.toSet()));
+        matchingKeys.addAll(keyValueTranslationsService.searchTranslations(text).stream().map(KeyValueTranslation::getKey).collect(Collectors.toSet()));
+        matchingKeys.addAll(keyValueHistoryService.searchHistory(text).stream().map(KeyValueHistory::getKey).collect(Collectors.toSet()));
 
         return matchingKeys.stream()
             .map(keyValueStorageService::retrieve)

@@ -1,4 +1,4 @@
-package me.mourjo.flowcrux.db;
+package me.mourjo.flowcrux.db.entities;
 
 import java.time.OffsetDateTime;
 
@@ -13,7 +13,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @Getter
 @Setter
 @Builder
-public class KeyValueHistoryEntity {
+public class KeyValueHistory {
 
     @Id
     @Column("id")
@@ -27,11 +27,11 @@ public class KeyValueHistoryEntity {
 
     @Column("key_version")
     private Long version;
-    
+
     @Column("created_at")
     private OffsetDateTime createdAt;
 
-    public KeyValueHistoryEntity(Long id, String key, String value, Long version, OffsetDateTime createdAt) {
+    public KeyValueHistory(Long id, String key, String value, Long version, OffsetDateTime createdAt) {
         this.id = id;
         this.key = key;
         this.value = value;
