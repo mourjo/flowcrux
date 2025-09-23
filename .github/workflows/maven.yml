@@ -27,16 +27,5 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
           cache: maven
-      - name: Run docker-compose
-        uses: hoverkraft-tech/compose-action@v2.0.1
-        with:
-          compose-file: "./docker-compose.yaml"
-
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-
-      - name: Wait for Zeebe Broker
-        uses: ifaxity/wait-on-action@v1.2.1
-        with:
-          resource: http://localhost:8081/operate
-          timeout: 120000
