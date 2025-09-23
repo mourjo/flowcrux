@@ -1,6 +1,6 @@
 include:
   - docker-compose-camunda-8.7/docker-compose-core.yaml
-  - docker-compose-camunda-8.7/docker-compose-web-modeler.yaml
+#  - docker-compose-camunda-8.7/docker-compose-web-modeler.yaml
 
 services:
   kafka-broker:
